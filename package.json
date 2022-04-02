@@ -1,16 +1,16 @@
 {
-  "name": "serverhttpexpress",
-  "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
+  "dependencies": {
+    "express": "^4.17.3"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
   },
+  "name": "desafio",
+  "version": "1.0.0",
+  "main": "server.js",
+  "devDependencies": {},
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "express": "^4.17.3"
-  }
+  "description": ""
 }
