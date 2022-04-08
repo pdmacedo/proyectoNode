@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar productos</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+        integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container mt-3">
+        <div class="jumbotron">
+
+            <h2 style="color:rgb(0, 0, 0);">Productos actuales</h2>
+            <% if(respuesta.length > 0){ %>
+                <div class="container mt-3">
+                    <div class="table-responsive">
+                        <table class="table table-dark">
+                            <tr style="color: rgb(23, 51, 167);"> 
+                                <th>Nombre</th> 
+                                <th>Precio</th> 
+                                <th>Foto URL</th> 
+                            </tr>
+
+                            <% for (const producto of respuesta) {%>
+                            <tr>
+                                <td><%=producto.title%></td>
+                                <td><%=producto.precio%></td>
+                                <td><%=producto.url%></td>
+                            </tr>
+                            <%};%>
+                        </table>
+                    </div>
+
+                    <a href="/" style="margin-left: 5px;" class="btn btn-success mt-3 mb-5">Adicionar producto</a>
+
+                </div>
+            <% } else{ %>
+                <br>
+                <h3 style="margin-top:10px" class="alert alert-danger">No se encontraron productos</h1>
+                <a href="/" style="margin-top: 1px;" class="btn btn-success mt-3 mb-5">Adicionar producto</a>
+            <% } %>
+        </div>
+    </div>
+</body>
+</html>
