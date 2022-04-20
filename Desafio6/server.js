@@ -24,7 +24,7 @@ const productos = productosApi.getAll();
 io.on('connection', (socket) => {
     console.log('Un cliente se ha conectado');
     socket.emit('messages', messages);
-    socket.emit('producto', productos);
+    socket.emit('productos', productos);
 
     socket.on('new-message', message => {
         mensajesApi.save(message);
@@ -34,7 +34,7 @@ io.on('connection', (socket) => {
     socket.on('new-product', product => {
         productosApi.save(product);
         console.log(productos);
-        io.sockets.emit('producto', productos);
+        io.sockets.emit('productos', productos);
     });
 
 });

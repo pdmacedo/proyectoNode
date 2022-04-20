@@ -34,7 +34,7 @@ function renderProduct(productos) {
     .then((plantilla) => {
       const template = Handlebars.compile(plantilla);
       const html = template({ productos });
-      return html;
+      return document.getElementById("productos").innerHTML = html;
     });
 }
 // function renderProduct(productos) {
