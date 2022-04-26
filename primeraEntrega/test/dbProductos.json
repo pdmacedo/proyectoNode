@@ -1,0 +1,20 @@
+[
+    {
+      "title": "iPhone 10",
+      "precio": "1000",
+      "url": "url de la foto",
+      "id": 1
+    },
+    {
+        "title": "PS5",
+        "precio": "600",
+        "url": "url de la foto",
+        "id": 2
+    },
+    {
+        "title": "PS5",
+        "precio": "600",
+        "url": "url de la foto",
+        "id": 3
+    }
+]
