@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ingreso de Productos</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+      integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="../public/css/estilos.css" />
+  </head>
+
+  <style>
+    .table td,
+    .table th {
+      vertical-align: middle;
+    }
+  </style>
+
+  <% if (respuesta.length > 0) { %>
+
+  <div class="container mt-3">
+    <h2>Lista de Productos</h2>
+    <div class="table-responsive">
+      <table class="table table-dark">
+        <tr>
+          <th>Nombre</th>
+          <th>Precio</th>
+          <th>Foto</th>
+        </tr>
+        <% for (const prod of respuesta) { %>
+        <tr>
+          <td><%=prod.title%></td>
+          <td><%=prod.precio%></td>
+          <td><%=prod.url%></td>
+          <td>
+            <a type="button" onclick="deleteById('${prod.id}')">Eliminar</a>
+          </td>
+          <td>
+            <a type="button" onclick="actualizaId('${prod.id}')">Actualizar</a>
+          </td>
+        </tr>
+        <% } %>
+      </table>
+    </div>
+  </div>
+  <% } %>
+</html>
