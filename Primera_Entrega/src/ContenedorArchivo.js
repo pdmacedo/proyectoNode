@@ -126,17 +126,18 @@ class ContenedorArchivo {
 
     dataAux = dataAux.map(function (obj) {
       if (obj.id == id) {
-        obj.productos = obj.productos.map(function (e) {
+        obj.productos = obj.productos.filter(function (e) {
            if (e.id != idProd) {
             obj.productos = e;
             return obj.productos;
           }
         });
       }
+      return obj;
     });
 
-    // dataAux = JSON.stringify(dataAux);
-    // await fs.writeFile(this.ruta, dataAux);
+    dataAux = JSON.stringify(dataAux);
+    await fs.writeFile(this.ruta, dataAux);
   }
 }
 
