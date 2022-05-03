@@ -1,76 +1,49 @@
-const express = require("express");
-const { Router } = express;
-const ProductosApi = require('./api/productos.js');
+const express = require('express');
+const { Server: IOServer } = require('socket.io');
+const { Server: HttpServer } = require('http');
+const MysqlDB = require('./api/ContenedorSQL');
 
-//ROUTER
+// Instancio servidor, socket y api
 
-const productosApi = new ProductosApi('dbProductos.json');
-const productosRouter = new Router();
-
-//SERVIDOR
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.set('views', './views');
-app.set('view engine', 'ejs');
-app.use('/api/productos', productosRouter);
+const httpServer = new HttpServer(app);
+const io = new IOServer(httpServer);
 
-//ADMINISTRADOR
+const conexMDB = new MysqlDB(optionsMDB, 'productos');
+const conexLite = new MysqlDB(optionsLite, 'mensajes');
 
-const admin = true;
+const productos = conexMDB.getAll();
+const mensajes = conexLite.getAll();
 
-function errorNoAdmin(ruta, metodo) {
-    const error = { error: -1,}
-    if(ruta && metodo){
-        error.descripcion = `Ruta: '${ruta}'. Metodo: ${metodo} no autorizado`;
-    } else{
-        error.descripcion = 'No autorizado';
-    }
-    return error;
-}
+// Configuro el socket
 
-function soloAdmins(req, res, next) {
-    if(!admin){
-        res.json(errorNoAdmin());
-    } else{
-        next();
-    }
-}
+io.on('connection',  (socket) => {
+    console.log('Nuevo cliente conectado!');
+    socket.emit('mensajes', mensajes);
+    socket.emit('productos', productos);
 
-//LLAMAR A LOS MÉTODOS CON LAS RUTAS
+    socket.on('new-message', mes => {
+        mensajes.addProduct(mes);
+        io.sockets.emit('mensajes', mensajes);
+    });
 
-app.get('/', async (req,res) => {
-    res.render('index');
+    socket.on('new-product', product => {
+        productos.save(product);
+        io.sockets.emit('productos', productos);
+    });
+    
+});
+
+// Agrego middlewares
+
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+app.use(express.static('public'))
+
+// Servidor
+
+const PORT = 8080
+const connectedServer = httpServer.listen(PORT, () => {
+    console.log(`Servidor http escuchando en el puerto ${connectedServer.address().port}`)
 })
-
-app.get('/api/productos', async (req,res) => {
-    const respuesta = await productosApi.getAll();
-    res.render('makeProductos', {respuesta});
-})
-
-app.get('/api/productos/:id', async (req,res) => { 
-    const respuesta= await productosApi.getById(req.params.id);
-    res.render('makeProductos', {respuesta});
-})
-
-app.post('/api/productos', soloAdmins, async (req,res) => {
-    const respuesta = await productosApi.save(req.body);
-    res.send(respuesta);
-})
-
-app.put('/api/productos/:id', soloAdmins, async (req,res) => {
-    const respuesta = await productosApi.actualizaId(req.params.id, req.body);
-    res.send(respuesta);
-})
-
-app.delete('/api/productos/:id', async (req,res) => { 
-    const respuesta= await productosApi.deleteById(req.params.id);
-    res.send(respuesta);
-})
-
-const PORT = 8080;
-const server = app.listen(PORT, () => {
-    console.log(`Servidor http escuchando ${server.address().port}`);
-  });
-  
-  server.on("error", (error) => console.log(`Error en el servidor ${error}`));
+connectedServer.on('error', error => console.log(`Error en servidor ${error}`))
