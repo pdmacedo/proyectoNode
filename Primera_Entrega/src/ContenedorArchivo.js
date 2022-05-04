@@ -27,21 +27,26 @@ class ContenedorArchivo {
     return data;
   }
 
-  async guardarPorId(id) {
+  async guardarPorId(id, idCarro) {
     let rawdata = await fs.readFile("../Primera_Entrega/dbProductos.json");
     let data = JSON.parse(rawdata);
     let dataAux = [...data];
 
     let datosCarro = await fs.readFile(this.ruta);
     let dataNueva = JSON.parse(datosCarro);
+    let dataNueAux = [...dataNueva];
 
     dataAux = dataAux.map(function (obj) {
       if (obj.id == id) {
-        dataNueva = dataNueva.map(function (e) {
-          e.productos.push(obj);
-          return e;
+        dataNueAux = dataNueAux.filter(function (e) {
+          if (e.id == idCarro) {
+            e.productos.push(obj);
+            return e;
+          }
         });
       }
+
+      return dataNueAux;
     });
 
     dataNueva = JSON.stringify(dataNueva);
@@ -127,7 +132,7 @@ class ContenedorArchivo {
     dataAux = dataAux.map(function (obj) {
       if (obj.id == id) {
         obj.productos = obj.productos.filter(function (e) {
-           if (e.id != idProd) {
+          if (e.id != idProd) {
             obj.productos = e;
             return obj.productos;
           }

@@ -73,8 +73,8 @@ carritosRouter.get('/:id?/productos', async (req, res) =>{
     res.json(await carritosAPi.listar(req.params.id))
 });
 
-carritosRouter.post('/:id?/productos', async (req, res) =>{
-    res.json(await carritosAPi.guardarPorId(req.params.id))
+carritosRouter.post('/:id?/productos/:id_Carro?', async (req, res) =>{
+    res.json(await carritosAPi.guardarPorId(req.params.id, req.params.id_Carro))
 })
 
 
